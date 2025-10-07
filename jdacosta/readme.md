@@ -1,0 +1,2 @@
+- the file stock_price_history.yaml is a snowflake semantic model file
+- the spec for snowflake semantic model files is located here: https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst/semantic-model-spec

@@ -1,0 +1,37 @@
+# Data directories
+data/
+custom_data/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Parquet files
+*.parquet
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+.env

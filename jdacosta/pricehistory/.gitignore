@@ -1,20 +1,42 @@
-# Data directories
-data/
-custom_data/
-
-# Python cache
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# Virtual environments
-venv/
-env/
-ENV/
+# Environment variables
+.env
+.env.local
+.env.production
 
 # Logs
 *.log
+logs/
+
+# Data files (optional - remove if you want to track data)
+data/
+*.parquet
+*.csv
+*.xlsx
+
+# Jupyter Notebook
+.ipynb_checkpoints
 
 # IDE
 .vscode/
@@ -26,12 +48,5 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Parquet files
-*.parquet
-
-# Distribution / packaging
-dist/
-build/
-*.egg-info/
-
-.env
+# Streamlit
+.streamlit/

@@ -1,0 +1,22 @@
+# Stock Price History Downloader Requirements
+# For Snowflake Container Runtime for ML
+
+# Core dependencies
+yfinance>=0.2.32
+pandas>=2.0.0
+pyarrow>=14.0.0
+numpy>=1.24.0
+
+# Optional but recommended for better performance
+fastparquet>=2023.10.0
+
+# Snowflake integration
+snowflake-snowpark-python>=1.11.0
+python-dotenv>=1.0.0
+
+# Logging and utilities (built-in with Python 3.x)
+# - logging
+# - datetime
+# - pathlib
+# - concurrent.futures
+

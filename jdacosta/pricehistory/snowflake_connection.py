@@ -193,7 +193,7 @@ class SnowflakeConnectionManager:
 
     def create_news_table(self, table_name: Optional[str] = None) -> bool:
         """
-        Create the stock news table if it doesn't exist.
+        Create the stock news table if it doesn't exist with updated schema.
 
         Args:
             table_name: Name of table (default from env or STOCK_NEWS)
@@ -209,14 +209,20 @@ class SnowflakeConnectionManager:
         create_sql = f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
             TICKER VARCHAR(10),
-            TITLE VARCHAR(500),
+            ID VARCHAR(50),
+            TITLE VARCHAR(1000),
+            SUMMARY TEXT,
+            DESCRIPTION TEXT,
             PUBLISHER VARCHAR(100),
-            LINK VARCHAR(1000),
-            PUBLISH_TIME TIMESTAMP,
-            TYPE VARCHAR(50),
-            THUMBNAIL_URL VARCHAR(1000),
-            DOWNLOAD_TIMESTAMP TIMESTAMP,
-            PRIMARY KEY (LINK)
+            LINK VARCHAR(2000),
+            PUBLISH_TIME TIMESTAMP_NTZ,
+            DISPLAY_TIME TIMESTAMP_NTZ,
+            CONTENT_TYPE VARCHAR(50),
+            THUMBNAIL_URL VARCHAR(2000),
+            IS_PREMIUM BOOLEAN,
+            IS_HOSTED BOOLEAN,
+            DOWNLOAD_TIMESTAMP TIMESTAMP_NTZ,
+            PRIMARY KEY (TICKER, ID)
         )
         """
 
@@ -296,11 +302,21 @@ class SnowflakeConnectionManager:
                 str(price_file), price_table
             )
 
-        # Upload news
+        # Upload news (check both possible locations)
         news_file = ticker_dir / f"news-{ticker}.parquet"
+        news_file_alt = (
+            Path(data_dir).parent / "news" / ticker / f"news-{ticker}.parquet"
+        )
+
+        news_path = None
         if news_file.exists():
+            news_path = news_file
+        elif news_file_alt.exists():
+            news_path = news_file_alt
+
+        if news_path:
             news_table = os.getenv("SNOWFLAKE_NEWS_TABLE", "STOCK_NEWS")
-            results["news"] = self.upload_parquet_file(str(news_file), news_table)
+            results["news"] = self.upload_parquet_file(str(news_path), news_table)
 
         return results
 

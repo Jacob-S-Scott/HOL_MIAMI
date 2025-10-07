@@ -1,5 +1,4 @@
-# Stock Price History Downloader Requirements
-# For Snowflake Container Runtime for ML
+# Stock Data Management System Requirements
 
 # Core dependencies
 yfinance>=0.2.32
@@ -7,16 +6,19 @@ pandas>=2.0.0
 pyarrow>=14.0.0
 numpy>=1.24.0
 
-# Optional but recommended for better performance
-fastparquet>=2023.10.0
-
 # Snowflake integration
 snowflake-snowpark-python>=1.11.0
 python-dotenv>=1.0.0
 
-# Logging and utilities (built-in with Python 3.x)
-# - logging
-# - datetime
-# - pathlib
-# - concurrent.futures
+# Web UI dependencies
+streamlit>=1.28.0
+plotly>=5.17.0
+openpyxl>=3.1.0
 
+# Optional but recommended for better performance
+fastparquet>=2023.10.0
+
+# Development and testing
+pytest>=7.4.0
+black>=23.0.0
+flake8>=6.0.0

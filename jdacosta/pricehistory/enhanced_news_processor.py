@@ -16,7 +16,7 @@ from datetime import datetime
 from typing import List, Dict, Any, Optional
 from pathlib import Path
 
-from app import StockDataDownloader
+from stock_downloader import StockDataDownloader
 from snowflake_connection import SnowflakeConnectionManager
 
 logger = logging.getLogger(__name__)

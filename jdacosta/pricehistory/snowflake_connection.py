@@ -169,15 +169,14 @@ class SnowflakeConnectionManager:
 
         create_sql = f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
-            DATE DATE,
-            OPEN_PRICE FLOAT,
-            HIGH_PRICE FLOAT,
-            LOW_PRICE FLOAT,
-            CLOSE_PRICE FLOAT,
-            VOLUME NUMBER,
-            DIVIDENDS FLOAT,
-            STOCK_SPLITS FLOAT,
             TICKER VARCHAR(10),
+            DATE DATE,
+            OPEN FLOAT,
+            HIGH FLOAT,
+            LOW FLOAT,
+            CLOSE FLOAT,
+            ADJ_CLOSE FLOAT,
+            VOLUME BIGINT,
             DOWNLOAD_TIMESTAMP TIMESTAMP,
             PRIMARY KEY (TICKER, DATE)
         )

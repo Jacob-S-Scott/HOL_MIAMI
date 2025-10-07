@@ -1,0 +1,140 @@
+name: stock_prices_semantic_model
+description: Semantic model for historical daily stock prices (OHLCV) with dividends and splits.
+custom_instructions: >
+  If the user doesn't specify a date filter, apply a default filter for the last year.
+  Round numeric outputs to 2 decimal places.
+  If the user asks for 'returns' or 'change', interpret as percentage change over
+  the selected period (e.g., (last_close - first_close) / first_close * 100).
+
+tables:
+  - name: stock_prices
+    description: Daily OHLCV per ticker.
+    base_table:
+      database: SNOWFLAKE_INTELIGENCE_HOL
+      schema: DATA
+      table: STOCK_PRICE_HISTORY
+
+    time_dimensions:
+      - name: date
+        synonyms: ["trading date", "day"]
+        description: Trading day (no time component).
+        expr: DATE
+        data_type: DATE
+        unique: false
+
+    dimensions:
+      - name: ticker
+        synonyms: ["symbol"]
+        description: Stock ticker symbol (e.g., NVDA).
+        expr: TICKER
+        data_type: TEXT
+        unique: false
+        is_enum: true
+
+      - name: download_timestamp
+        synonyms: ["ingest time", "load time"]
+        description: Timestamp when prices were downloaded.
+        expr: TRY_TO_TIMESTAMP_NTZ(DOWNLOAD_TIMESTAMP)
+        data_type: TIMESTAMP_NTZ
+        unique: false
+
+    facts:
+      - name: open_price
+        synonyms: ["open"]
+        description: Opening price for the day.
+        expr: OPEN_PRICE
+        data_type: NUMBER
+
+      - name: high_price
+        synonyms: ["high"]
+        description: Intraday high price.
+        expr: HIGH_PRICE
+        data_type: NUMBER
+
+      - name: low_price
+        synonyms: ["low"]
+        description: Intraday low price.
+        expr: LOW_PRICE
+        data_type: NUMBER
+
+      - name: close_price
+        synonyms: ["close", "closing price"]
+        description: Closing price for the day.
+        expr: CLOSE_PRICE
+        data_type: NUMBER
+
+      - name: volume
+        synonyms: ["shares traded"]
+        description: Number of shares traded during the day.
+        expr: VOLUME
+        data_type: NUMBER
+
+      - name: dividends
+        synonyms: ["dividend"]
+        description: Cash dividends paid on the day.
+        expr: DIVIDENDS
+        data_type: NUMBER
+
+      - name: stock_splits
+        synonyms: ["split ratio"]
+        description: Stock split ratio for the day (e.g., 4.0 == 4-for-1).
+        expr: STOCK_SPLITS
+        data_type: NUMBER
+
+    metrics:
+      - name: avg_close_price
+        synonyms: ["average close"]
+        description: Average closing price over the selected period.
+        expr: AVG(CLOSE_PRICE)
+
+      - name: max_close_price
+        synonyms: ["record close", "all-time high close"]
+        description: Maximum closing price over the selected period.
+        expr: MAX(CLOSE_PRICE)
+
+      - name: min_close_price
+        synonyms: ["lowest close"]
+        description: Minimum closing price over the selected period.
+        expr: MIN(CLOSE_PRICE)
+
+      - name: total_volume
+        synonyms: ["sum volume", "trading volume"]
+        description: Total shares traded over the selected period.
+        expr: SUM(VOLUME)
+
+    filters:
+      - name: last_30_days
+        synonyms: ["past month"]
+        description: Filter to the last 30 calendar days.
+        expr: "DATE >= DATEADD('day', -30, CURRENT_DATE())"
+
+      - name: last_year
+        synonyms: ["past year", "last 12 months"]
+        description: Filter to the last 365 days.
+        expr: "DATE >= DATEADD('day', -365, CURRENT_DATE())"
+
+metrics:
+  - name: pct_change_close
+    synonyms: ["percent change", "return"]
+    description: Percentage change of closing price over the selected period by ticker.
+    expr: "(MAX(CLOSE_PRICE) - MIN(CLOSE_PRICE)) / NULLIF(MIN(CLOSE_PRICE), 0) * 100"
+
+verified_queries:
+  - name: average_close_by_month
+    question: What was the average closing price by month for NVDA this year?
+    sql: >
+      SELECT DATE_TRUNC('month', DATE) AS month,
+             AVG(CLOSE_PRICE) AS avg_close
+      FROM SNOWFLAKE_INTELIGENCE_HOL.DATA.STOCK_PRICE_HISTORY
+      WHERE TICKER = 'NVDA'
+        AND DATE >= DATE_TRUNC('year', CURRENT_DATE())
+      GROUP BY 1
+      ORDER BY 1
+
+  - name: total_volume_last_30_days
+    question: How many shares traded for AAPL in the last 30 days?
+    sql: >
+      SELECT SUM(VOLUME) AS total_volume
+      FROM SNOWFLAKE_INTELIGENCE_HOL.DATA.STOCK_PRICE_HISTORY
+      WHERE TICKER = 'AAPL'
+        AND DATE >= DATEADD('day', -30, CURRENT_DATE())

@@ -185,7 +185,8 @@ def test_single_ticker():
     print("SINGLE TICKER TEST")
     print("=" * 80)
 
-    ticker = "NVDA"
+    tickers = ["NVDA"]
+    ticker = tickers[0]  # Use first ticker for backward compatibility
     max_items = 5
 
     print(f"Testing single ticker: {ticker}")

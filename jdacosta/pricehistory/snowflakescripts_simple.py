@@ -553,20 +553,25 @@ class SimpleSnowflakeStoredProcedureManager:
             logger.error(f"Failed to register query procedure: {str(e)}")
             return False
 
-    def test_procedures(self, ticker: str = "NVDA") -> Dict[str, str]:
+    def test_procedures(self, tickers: List[str] = None) -> Dict[str, str]:
         """
         Test all registered stored procedures.
 
         Args:
-            ticker: Stock ticker to test with
+            tickers: List of stock tickers to test with
 
         Returns:
             Dictionary with test results
         """
+        if tickers is None:
+            tickers = ["NVDA"]
+
         results = {}
+        ticker = tickers[0]  # Use first ticker for testing
 
         try:
-            logger.info(f"Testing stored procedures with {ticker}")
+            logger.info(f"Testing stored procedures with tickers: {tickers}")
+            logger.info(f"Using primary ticker: {ticker}")
 
             # Test table creation
             logger.info("1. Testing table creation procedure...")
@@ -655,7 +660,11 @@ def main():
         "--test", action="store_true", help="Test stored procedures with NVDA"
     )
     parser.add_argument("--list", action="store_true", help="List existing procedures")
-    parser.add_argument("--ticker", default="NVDA", help="Ticker symbol for testing")
+    parser.add_argument(
+        "--tickers",
+        default="NVDA",
+        help="Comma-separated list of ticker symbols for testing",
+    )
 
     args = parser.parse_args()
 
@@ -709,9 +718,11 @@ def main():
         if args.test:
             logger.info("=== TESTING STORED PROCEDURES ===")
 
-            print(f"\nTesting with ticker: {args.ticker}")
+            # Parse tickers from command line argument
+            tickers = [t.strip().upper() for t in args.tickers.split(",")]
+            print(f"\nTesting with tickers: {tickers}")
 
-            results = manager.test_procedures(args.ticker)
+            results = manager.test_procedures(tickers)
 
             print("\nTest Results:")
             for test_name, result in results.items():

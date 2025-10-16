@@ -22,9 +22,11 @@ def main():
         retry_delay=5.0,  # 5 seconds initial delay
     )
 
-    # Test with a single ticker
-    ticker = "NVDA"
-    print(f"Testing with ticker: {ticker}")
+    # Test with a single ticker from list
+    tickers = ["NVDA"]
+    ticker = tickers[0]
+    print(f"Testing with tickers: {tickers}")
+    print(f"Using primary ticker: {ticker}")
     print(f"Downloading maximum available history (incremental mode)...")
     print()
 

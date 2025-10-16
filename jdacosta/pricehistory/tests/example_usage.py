@@ -56,7 +56,7 @@ def example_3_intraday_data():
 
     # Download last 5 days of 5-minute data
     result = downloader.process_ticker(
-        ticker="NVDA", period="5d", interval="5m", include_news=False
+        ticker=["NVDA"][0], period="5d", interval="5m", include_news=False
     )
 
     print(f"Results: {result}")

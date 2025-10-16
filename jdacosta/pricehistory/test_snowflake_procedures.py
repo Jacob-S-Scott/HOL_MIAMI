@@ -43,7 +43,8 @@ def test_stored_procedures_complete():
         session = get_snowflake_session()
         logger.info("✓ Connected to Snowflake")
 
-        ticker = "NVDA"
+        tickers = ["NVDA"]
+        ticker = tickers[0]  # Use first ticker for backward compatibility
 
         print("=" * 60)
         print("TESTING SNOWFLAKE STORED PROCEDURES")

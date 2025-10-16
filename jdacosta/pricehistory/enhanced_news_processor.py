@@ -759,7 +759,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     # Test with a few tickers
-    test_tickers = ["NVDA", "AAPL", "MSFT"]
+    test_tickers = ["NVDA"]  # Updated to use single ticker list format
 
     print("=" * 80)
     print("ENHANCED NEWS PROCESSOR - BATCH PROCESSING TEST")

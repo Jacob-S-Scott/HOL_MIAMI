@@ -510,20 +510,26 @@ class SnowflakeStoredProcedureManager:
             return False
 
     def test_price_history_procedure(
-        self, ticker: str = "NVDA", period: str = "1mo"
+        self, tickers: List[str] = None, period: str = "1mo"
     ) -> str:
         """
         Test the price history stored procedure.
 
         Args:
-            ticker: Stock ticker to test with
+            tickers: List of stock tickers to test with
             period: Period for data download
 
         Returns:
             Result message from the procedure
         """
+        if tickers is None:
+            tickers = ["NVDA"]
+
+        ticker = tickers[0]  # Use first ticker for testing
+
         try:
-            logger.info(f"Testing price history procedure with {ticker}")
+            logger.info(f"Testing price history procedure with tickers: {tickers}")
+            logger.info(f"Using primary ticker: {ticker}")
 
             # Call the stored procedure
             result = self.session.sql(
@@ -542,19 +548,25 @@ class SnowflakeStoredProcedureManager:
             logger.error(error_msg)
             return error_msg
 
-    def test_news_procedure(self, ticker: str = "NVDA", max_items: int = 5) -> str:
+    def test_news_procedure(self, tickers: List[str] = None, max_items: int = 5) -> str:
         """
         Test the news stored procedure.
 
         Args:
-            ticker: Stock ticker to test with
+            tickers: List of stock tickers to test with
             max_items: Maximum number of news items
 
         Returns:
             Result message from the procedure
         """
+        if tickers is None:
+            tickers = ["NVDA"]
+
+        ticker = tickers[0]  # Use first ticker for testing
+
         try:
-            logger.info(f"Testing news procedure with {ticker}")
+            logger.info(f"Testing news procedure with tickers: {tickers}")
+            logger.info(f"Using primary ticker: {ticker}")
 
             # Call the stored procedure
             result = self.session.sql(
@@ -617,7 +629,11 @@ def main():
         "--test", action="store_true", help="Test stored procedures with NVDA"
     )
     parser.add_argument("--list", action="store_true", help="List existing procedures")
-    parser.add_argument("--ticker", default="NVDA", help="Ticker symbol for testing")
+    parser.add_argument(
+        "--tickers",
+        default="NVDA",
+        help="Comma-separated list of ticker symbols for testing",
+    )
     parser.add_argument("--period", default="1mo", help="Period for price history")
     parser.add_argument(
         "--max-news", type=int, default=5, help="Max news items for testing"
@@ -667,18 +683,18 @@ def main():
         if args.test:
             logger.info("=== TESTING STORED PROCEDURES ===")
 
-            print(f"\nTesting with ticker: {args.ticker}")
+            # Parse tickers from command line argument
+            tickers = [t.strip().upper() for t in args.tickers.split(",")]
+            print(f"\nTesting with tickers: {tickers}")
 
             # Test price history procedure
             print("\n1. Testing Price History Procedure...")
-            price_result = manager.test_price_history_procedure(
-                args.ticker, args.period
-            )
+            price_result = manager.test_price_history_procedure(tickers, args.period)
             print(f"   Result: {price_result}")
 
             # Test news procedure
             print("\n2. Testing News Procedure...")
-            news_result = manager.test_news_procedure(args.ticker, args.max_news)
+            news_result = manager.test_news_procedure(tickers, args.max_news)
             print(f"   Result: {news_result}")
 
             print("\n✅ Testing completed!")

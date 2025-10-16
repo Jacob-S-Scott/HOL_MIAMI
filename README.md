@@ -38,6 +38,8 @@ You'll gain practical "how-to" skills, a repeatable framework, and the confidenc
 
 ---
 
+## Password = "{username}@HOL!"
+
 ## Prerequisites
 
 - Laptop charged and ready

@@ -12,7 +12,7 @@ Thank you for joining **Snowflake and Hakkoda, an IBM Company** for this interac
 
 **Your Instructors:**
 
-- [**Atalia Horenshtien**](https://www.linkedin.com/in/ataliahorenshtien/) - Senior Solution Engineer, Snowflake
+- [**Atalia Horenshtien**](https://www.linkedin.com/in/ataliahorenshtien/) - Consulting Client Executive, Hakkoda (an IBM Company)
 - [**Jacob Scott**](https://www.linkedin.com/in/jacobscottengineer/) - Senior Consultant, AI Engineering, Hakkoda (an IBM Company)
 - [**John DaCosta**](https://www.linkedin.com/in/mrjdacosta/) - Senior Solution Engineer, Snowflake
 

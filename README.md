@@ -68,7 +68,7 @@ Hakkoda, an IBM Company
 
 ![Atalia Horenshtien](assets/atalia.jpg)
 
-## [Connect on LinkedIn](https://www.linkedin.com/in/ataliahorenshtien/)
+[Connect on LinkedIn](https://www.linkedin.com/in/ataliahorenshtien/)
 
 ### John DaCosta
 
